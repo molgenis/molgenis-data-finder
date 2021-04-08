@@ -1,0 +1,116 @@
+{
+    "freeze_patches": [{
+            "id": "freeze-1-original",
+            "label": "Freeze 1 Original",
+            "value": "freeze1_original",
+            "checked": true
+        },
+        {
+            "id": "freeze-1-patch-1",
+            "label": "Freeze 1 Patch 1",
+            "value": "freeze1_patch1",
+            "checked": true
+        },
+        {
+            "id": "freeze-2-original",
+            "label": "Freeze 2 Original",
+            "value": "freeze2_original",
+            "checked": true
+        }
+    ],
+    "tables": {
+        "freeze1_original": [{
+                "id": "freeze-1-original",
+                "freeze": "freeze1_original",
+                "label": "Subject",
+                "entity": "rd3_freeze1_subject"
+            },
+            {
+                "id": "freeze-1-original",
+                "freeze": "freeze1_original",
+                "label": "Subject Information",
+                "entity": "rd3_freeze1_subjectinfo"
+            },
+            {
+                "id": "freeze-1-original",
+                "freeze": "freeze1_original",
+                "label": "Samples",
+                "entity": "rd3_freeze1_sample"
+            },
+            {
+                "id": "freeze-1-original",
+                "freeze": "freeze1_original",
+                "label": "Experiments",
+                "entity": "rd3_freeze1_labinfo"
+            },
+            {
+                "id": "freeze-1-original",
+                "freeze": "freeze1_original",
+                "label": "Files",
+                "entity": "rd3_freeze1_file"
+            }
+        ],
+        "freeze1_patch1": [{
+                "id": "freeze-1-patch-1",
+                "freeze": "freeze1_patch1",
+                "label": "Subject",
+                "entity": "rd3_freeze1_subject"
+            },
+            {
+                "id": "freeze-1-patch-1",
+                "freeze": "freeze1_patch1",
+                "label": "Subject Information",
+                "entity": "rd3_freeze1_subjectinfo"
+            },
+            {
+                "id": "freeze-1-patch-1",
+                "freeze": "freeze1_patch1",
+                "label": "Samples",
+                "entity": "rd3_freeze1_sample"
+            },
+            {
+                "id": "freeze-1-patch-1",
+                "freeze": "freeze1_patch1",
+                "label": "Experiments",
+                "entity": "rd3_freeze1_labinfo"
+            },
+            {
+                "id": "freeze-1-patch-1",
+                "freeze": "freeze1_patch1",
+                "label": "Files",
+                "entity": "rd3_freeze1_file"
+            }
+        ],
+        "freeze2_original": [{
+                "id": "freeze-2-original",
+                "freeze": "freeze2_original",
+                "label": "Subject",
+                "entity": "rd3_freeze1_subject"
+            },
+            {
+                "id": "freeze-2-original",
+                "freeze": "freeze2_original",
+                "label": "Subject Information",
+                "entity": "rd3_freeze2_subjectinfo"
+            },
+            {
+                "id": "freeze-2-original",
+                "freeze": "freeze2_original",
+                "label": "Samples",
+                "entity": "rd3_freeze2_sample"
+            },
+            {
+                "id": "freeze-2-original",
+                "freeze": "freeze2_original",
+                "label": "Experiments",
+                "entity": "rd3_freeze2_labinfo"
+            },
+            {
+                "id": "freeze-2-original",
+                "freeze": "freeze2_original",
+                "label": "Files",
+                "entity": "rd3_freeze2_file"
+            }
+        ]
+    }
+}
