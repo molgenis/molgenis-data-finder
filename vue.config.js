@@ -25,8 +25,17 @@ const htmlTemplate = () => {
   if (process.env.NODE_ENV === 'test') return 'public/preview.html'
 }
 
-const PROXY_TARGET = 'https://master.dev.molgenis.org' // http://solve-rd-acc.gcc.rug.nl
+const PROXY_TARGET = 'https://solve-rd-acc.gcc.rug.nl'
+/*
+let apiDevServerProxyConf = {
+  target: PROXY_TARGET,
+  keepOrigin: true
+}
 
+if (process.env.DATA_EXPLORER_DEV_PW) {
+  apiDevServerProxyConf.auth = 'admin:' + process.env.DATA_EXPLORER_DEV_PW
+}
+*/
 module.exports = {
   transpileDependencies: ['@molgenis-ui/components-library'],
   runtimeCompiler: true,
@@ -74,7 +83,7 @@ module.exports = {
     host: process.env.JENKINS_AGENT_NAME || 'localhost',
     // Used to proxy a external API server to have someone to talk to during development
     proxy: process.env.NODE_ENV !== 'development' ? undefined : {
-      '/login': {
+      '^/login': {
         target: PROXY_TARGET,
         changeOrigin: true
       },
@@ -82,7 +91,19 @@ module.exports = {
         target: PROXY_TARGET,
         changeOrigin: true
       },
+      '/js': {
+        target: PROXY_TARGET,
+        changeOrigin: true
+      },
       '/img': {
+        target: PROXY_TARGET,
+        changeOrigin: true
+      },
+      '/logo': {
+        target: PROXY_TARGET,
+        changeOrigin: true
+      },
+      '/fonts': {
         target: PROXY_TARGET,
         changeOrigin: true
       },

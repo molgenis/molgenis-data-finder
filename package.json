@@ -38,9 +38,14 @@
     "vue-template-compiler": "^2.6.11",
     "zip-webpack-plugin": "^3.0.0"
   },
+  "peerDependencies": {
+    "bootstrap": "4.1.3",
+    "jquery": "1.9.1",
+    "popper.js": "1.14.3"
+  },
   "authors": [
     "David Ruvolo <d.c.ruvolo@rug.nl>",
     "Max Postema <m.e.postema@rug.nl>"
   ],
-  "license": ""
+  "license": "LGPL-3.0"
 }
