@@ -1,20 +1,12 @@
 <template>
   <div>
     <strong>Filter data</strong>
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Active</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li>
-    </ul>
+    <div class="d-flex">
+      <button type="button" class="tab-button">Samples</button>
+      <button type="button" class="tab-button selected">Patients</button>
+      <button type="button" class="tab-button">Labs</button>
+      <button type="button" class="tab-button">Files</button>
+    </div>
   </div>
 </template>
 
@@ -24,6 +16,19 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  .tab-button{
+    flex-grow: 1;
+    border: none;
+    background-color: white;
+    margin-left:1px;
+    height: 3rem;
+    &:hover{
+      background-color: #daedff;
+    }
+    &.selected{
+      background-color: #017FFD;
+      color: white;
+    }
+  }
 </style>

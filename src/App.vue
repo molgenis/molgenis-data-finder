@@ -5,6 +5,7 @@
         <filter-menu/>
       </aside>
       <main class="p-3">
+        {{ query() }}
         Hallo world
       </main>
     </div>
@@ -14,11 +15,17 @@
 <script>
 import PageComponent from '../node_modules/@molgenis/molgenis-ui-context/src/components/PageComponent.vue'
 import FilterMenu from './components/FilterMenu'
+import axios from 'axios'
+
 export default {
   components: { FilterMenu, PageComponent },
   methods: {
     setContext (context) {
       console.log('context: ' + context)
+    },
+    async query () {
+      const bla = await axios.get('/api/data/rd3_freeze1_subject')
+      return bla.data
     }
   }
 }
