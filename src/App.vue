@@ -2,11 +2,19 @@
   <page-component id="app" @contextLoaded="setContext">
     <div class="d-flex h-100">
       <aside class="menu h-100 p-3">
-        <filter-menu/>
+        <h2 class="h2">Find data</h2>
+        <p>Find data and customize the view.</p>
+        <form @submit.prevent>
+          <fieldset>
+            <legend>Select a table</legend>
+            <p>Choose a table to start with.</p>
+            <filter-menu @change="updateSelectedTable"/>
+          </fieldset>
+        </form>
       </aside>
       <main class="p-3">
-        {{ query() }}
-        Hallo world
+        <p><strong>Selected Table:</strong> {{ selectedTable }}</p>
+<!-- {{ query() }}-->
       </main>
     </div>
   </page-component>
@@ -15,18 +23,26 @@
 <script>
 import PageComponent from '../node_modules/@molgenis/molgenis-ui-context/src/components/PageComponent.vue'
 import FilterMenu from './components/FilterMenu'
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
+  data () {
+    return {
+      selectedTable: null
+    }
+  },
   components: { FilterMenu, PageComponent },
   methods: {
     setContext (context) {
       console.log('context: ' + context)
     },
-    async query () {
-      const bla = await axios.get('/api/data/rd3_freeze1_subject')
-      return bla.data
+    updateSelectedTable (data) {
+      this.selectedTable = data
     }
+    // async query () {
+    //   const bla = await axios.get('/api/data/rd3_freeze1_subject')
+    //   return bla.data
+    // }
   }
 }
 </script>
