@@ -10,10 +10,22 @@
             <p>Choose a table to start with.</p>
             <filter-menu @change="updateSelectedTable"/>
           </fieldset>
+          <fieldset>
+            <legend>Select a Freeze</legend>
+            <MultiFilter
+              v-bind:returnTypeAsObject="false"
+              v-bind:options="freezeModel"
+              v-bind:collapses="false"
+              v-bind:initialDisplayItems="5"
+              v-bind:maxVisibleOptions="5"
+              v-bind:optionsWarningCount="10"
+              name="multi-filter"></MultiFilter>
+          </fieldset>
         </form>
       </aside>
       <main class="p-3">
         <p><strong>Selected Table:</strong> {{ selectedTable }}</p>
+        <p>{{ freezeModel }}</p>
 <!-- {{ query() }}-->
       </main>
     </div>
@@ -21,17 +33,25 @@
 </template>
 
 <script>
-import PageComponent from '../node_modules/@molgenis/molgenis-ui-context/src/components/PageComponent.vue'
+import PageComponent from '@molgenis/molgenis-ui-context/src/components/PageComponent.vue'
 import FilterMenu from './components/FilterMenu'
+import { MultiFilter } from '@molgenis-ui/components-library/'
 // import axios from 'axios'
 
 export default {
   data () {
     return {
-      selectedTable: null
+      selectedTable: null,
+      freezeModel: () => Promise.resolve(
+        [
+          { name: 'Freeze 1 Original', value: 'freeze1_original' },
+          { name: 'Freeze 1 Patch 1', value: 'freeze1_patch1' },
+          { name: 'Freeze 2 Original', value: 'freeze2_original' }
+        ]
+      )
     }
   },
-  components: { FilterMenu, PageComponent },
+  components: { FilterMenu, PageComponent, MultiFilter },
   methods: {
     setContext (context) {
       console.log('context: ' + context)
