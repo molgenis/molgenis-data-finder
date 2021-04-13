@@ -1,6 +1,6 @@
 <template>
   <div class="checkbox-group">
-    <label><input type="checkbox" value="freeze1_original" v-model="checkedFreezes"/>Freeze 1 Original</label>
+    <label><input type="checkbox" value="freeze1_original" v-model="checkedFreezes" checked/>Freeze 1 Original</label>
     <label><input type="checkbox" value="freeze1_patch1" v-model="checkedFreezes"/>Freeze 1 Patch 1</label>
     <label><input type="checkbox" value="freeze2_original" v-model="checkedFreezes"/>Freeze 2 Original</label>
   </div>
