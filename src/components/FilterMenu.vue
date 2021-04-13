@@ -64,10 +64,9 @@ export default {
     label {
       display: flex;
       justify-content: center;
-      padding: 6px 0;
+      padding: 4px 0;
       background-color: #ffffff;
       border: 1px solid #CCCCCC;
-      font-size: 13pt;
       cursor: pointer;
     }
   }
