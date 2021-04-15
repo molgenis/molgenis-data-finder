@@ -83,6 +83,12 @@
       <p><code>Freeze: {{ selectedFreeze }}</code></p>
       <p><code>Sex: {{ selectedSex }}</code></p>
       <p><code>Affected Status: {{ selectedAffectedStatus }}</code></p>
+      <data-table
+        table="rd3_freeze1_subject"
+        :sex="selectedSex"
+        :affectedStatus="selectedAffectedStatus"
+        :freeze="selectedFreeze"
+      ></data-table>
       <!-- {{ query() }}-->
       </main>
     </div>
@@ -97,6 +103,7 @@ import FilterSex from './components/FilterSex'
 import FilterAffectedStatus from './components/FilterAffectedStatus'
 import FilterSolvedStatus from './components/FilterSolvedStatus.vue'
 import FilterLibrarySource from './components/FilterLibrarySource.vue'
+import DataTable from './components/DataTable.vue'
 // import axios from 'axios'
 
 export default {
@@ -108,9 +115,8 @@ export default {
       selectedAffectedStatus: ''
     }
   },
-  components: { FilterMenu, PageComponent, FilterFreeze, FilterSex, FilterAffectedStatus, FilterSolvedStatus, FilterLibrarySource },
+  components: { FilterMenu, PageComponent, FilterFreeze, FilterSex, FilterAffectedStatus, FilterSolvedStatus, FilterLibrarySource, DataTable },
   methods: {
-
     setContext (context) {
       console.log('context: ' + context)
     },
