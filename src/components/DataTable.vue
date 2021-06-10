@@ -4,6 +4,41 @@
       {{error}}
     </div>
     <div v-else>
+
+      <table class="table table-bordered">
+        <TableHeader
+          v-bind:visibleColumns="getColumns"
+          v-bind:sortColumnName="sorting"
+          v-bind:isSortOrderReversed="isReversed"
+          v-on:sort="(newValue) => {
+            isReversed =  ( sorting === newValue && isReversed == false )
+            sorting = newValue
+          }">
+        </TableHeader>
+        <TableRow
+            v-for="(entity, index) in getData"
+            v-bind:id="getEntityId(entity)"
+            v-bind:key="index"
+            v-bind:row-index="index"
+            v-bind:table-name="this.table"
+            v-bind:row-data="entity"
+            v-bind:visible-columns="getColumns"
+            v-bind:is-selected="false"
+            v-bind:is-editable="false"
+            v-bind:show-selected="false"
+        >
+          <template v-slot:edit-buttons>
+            <router-link
+              class="btn btn-sm text-secondary"
+              role="button"
+            >
+              details
+            </router-link>
+          </template>
+        </TableRow>
+      </table>
+
+      <!--
       <table class='table table-sm table-hover table-striped' style='overflow: auto'>
         <thead>
           <tr>
@@ -16,15 +51,18 @@
           </tr>
         </tbody>
       </table>
+      -->
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { TableRow, TableHeader } from '@molgenis-ui/components-library'
 
 export default {
   name: 'DataTable.vue',
+  components: { TableRow, TableHeader },
   props: {
     table: {
       type: String,
@@ -47,16 +85,24 @@ export default {
     return {
       metadata: null,
       data: null,
-      error: ''
+      error: '',
+      sorting: '',
+      isReversed: false,
+      idAttribute: ''
     }
   },
   methods: {
+    getEntityId (entity) {
+      return entity[this.idAttribute].toString()
+    },
     doRequest () {
       this.error = ''
       // Get metadata
       axios.get(`/api/metadata/${this.table}`)
         .then((response) => {
           this.metadata = response.data
+          // Find id atribute
+          this.idAttribute = this.metadata.data.attributes.items.find(item => item.data.idAttribute === true).data.name
         })
         .catch((error) => {
           this.error = error
