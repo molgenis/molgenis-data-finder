@@ -18,16 +18,30 @@
       >
       </ApiTable>
     </div>
+      <b-modal
+        id="reference-table-modal"
+        :title="refTableMetaData.label || refTableMetaData.id"
+        hide-footer
+        body-class="ref-modal-body"
+        dialog-class="ref-modal-dialog"
+        @hidden="resetRefState"
+      >
+        <RefTable
+          :is-data-loaded="isReferenceModalDataLoaded"
+          :entities-to-show="refTableData"
+          :meta-data="refTableMetaData"
+        />
+      </b-modal>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { ApiTable } from '@molgenis-ui/components-library'
+import { ApiTable, RefTable } from '@molgenis-ui/components-library'
 
 export default {
   name: 'DataTable.vue',
-  components: { ApiTable },
+  components: { ApiTable, RefTable },
   props: {
     table: {
       type: String,
@@ -52,7 +66,10 @@ export default {
       data: null,
       error: '',
       sorting: '',
-      isReversed: false
+      isReversed: false,
+      isReferenceModalDataLoaded: false,
+      refTableData: [],
+      refTableMetaData: {}
     }
   },
   methods: {
@@ -62,15 +79,16 @@ export default {
     doRequest () {
       this.error = ''
       // Get metadata
-      axios.get(`/api/metadata/${this.table}`)
+      axios.get(`/api/metadata/${this.table}?flattenAttributes=true`)
         .then((response) => {
+          console.log(response.data)
           this.metadata = response.data
         })
         .catch((error) => {
           this.error = error
         })
       // Get entity data
-      axios.get(`/api/data/${this.table}`, {
+      axios.get(`/api/data/${this.table}?page=0&size=20&expand=sex1,mid`, {
         params: {
           affectedStatus: this.affectedStatus
         }
@@ -82,13 +100,33 @@ export default {
         .catch((error) => {
           this.error = error
         })
+    },
+    // Value is either refObject {id {string}, label{string}} or list of refObjects (mref)
+    async requestShowRefTable ({ refEntityType, value }) {
+      // fetch data / metadata for the references
+      this.refTableData = []
+      this.refTableMetaData = {}
+      this.isReferenceModalDataLoaded = true
+      this.$bvModal.show('reference-table-modal')
+    },
+    resetRefState () {
+      this.isReferenceModalDataLoaded = false
+      this.refTableData = []
+      this.refTableMetaData = {}
     }
   },
   created () {
     this.doRequest()
+    this.$eventBus.$on('show-reference-table', this.requestShowRefTable)
+  },
+  destroyed () {
+    this.$eventBus.$off('show-reference-table')
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+.modal-backdrop{
+  opacity: 0.3;
+}
 </style>

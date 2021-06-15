@@ -10,6 +10,7 @@ library.add(faSort, faShare, faSortAlphaUp, faSortAlphaDown)
 
 Vue.use(BootstrapVue)
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
+Vue.prototype.$eventBus = new Vue()
 Vue.config.productionTip = false
 
 const i18n = {
