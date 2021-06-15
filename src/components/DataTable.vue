@@ -126,7 +126,12 @@ export default {
 </script>
 
 <style lang="scss">
-.modal-backdrop{
-  opacity: 0.3;
-}
+  .modal-backdrop{
+    opacity: 0.3;
+  }
+
+  // FIXME: how are we going to show the table?
+  main{
+    overflow: auto;
+  }
 </style>
