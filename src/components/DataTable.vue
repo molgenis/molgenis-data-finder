@@ -5,6 +5,7 @@
     </div>
     <div v-else>
       <ApiTable
+        v-if="data!=null && metadata!=null"
         v-bind:sortColumnName="sorting"
         v-bind:isSortOrderReversed="isReversed"
         v-bind:is-selectable="false"
