@@ -4,65 +4,29 @@
       {{error}}
     </div>
     <div v-else>
-
-      <table class="table table-bordered">
-        <TableHeader
-          v-bind:visibleColumns="getColumns"
-          v-bind:sortColumnName="sorting"
-          v-bind:isSortOrderReversed="isReversed"
-          v-on:sort="(newValue) => {
-            isReversed =  ( sorting === newValue && isReversed == false )
-            sorting = newValue
-          }">
-        </TableHeader>
-        <TableRow
-            v-for="(entity, index) in getData"
-            v-bind:id="getEntityId(entity)"
-            v-bind:key="index"
-            v-bind:row-index="index"
-            v-bind:table-name="this.table"
-            v-bind:row-data="entity"
-            v-bind:visible-columns="getColumns"
-            v-bind:is-selected="false"
-            v-bind:is-editable="false"
-            v-bind:show-selected="false"
-        >
-          <template v-slot:edit-buttons>
-            <router-link
-              class="btn btn-sm text-secondary"
-              role="button"
-            >
-              details
-            </router-link>
-          </template>
-        </TableRow>
-      </table>
-
-      <!--
-      <table class='table table-sm table-hover table-striped' style='overflow: auto'>
-        <thead>
-          <tr>
-            <th class="text-nowrap" v-for="col in getColumns" :key="col.id" >{{col.label}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(row, rowIndex) in getData" :key="rowIndex">
-            <td v-for="(cell, cellIndex) in row" :key="cellIndex" class="text-nowrap">{{cell}}</td>
-          </tr>
-        </tbody>
-      </table>
-      -->
+      <ApiTable
+        v-bind:sortColumnName="sorting"
+        v-bind:isSortOrderReversed="isReversed"
+        v-bind:is-selectable="false"
+        v-bind:data="data"
+        v-bind:metadata="metadata"
+        v-on:sort="(newValue) => {
+        isReversed =  ( sorting === newValue && isReversed == false )
+        sorting = newValue
+        }"
+      >
+      </ApiTable>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { TableRow, TableHeader } from '@molgenis-ui/components-library'
+import { ApiTable } from '@molgenis-ui/components-library'
 
 export default {
   name: 'DataTable.vue',
-  components: { TableRow, TableHeader },
+  components: { ApiTable },
   props: {
     table: {
       type: String,
@@ -87,8 +51,7 @@ export default {
       data: null,
       error: '',
       sorting: '',
-      isReversed: false,
-      idAttribute: ''
+      isReversed: false
     }
   },
   methods: {
@@ -101,8 +64,6 @@ export default {
       axios.get(`/api/metadata/${this.table}`)
         .then((response) => {
           this.metadata = response.data
-          // Find id atribute
-          this.idAttribute = this.metadata.data.attributes.items.find(item => item.data.idAttribute === true).data.name
         })
         .catch((error) => {
           this.error = error
@@ -120,22 +81,6 @@ export default {
         .catch((error) => {
           this.error = error
         })
-    }
-  },
-  computed: {
-    getColumns () {
-      if (this.metadata !== null) {
-        return this.metadata.data.attributes.items.map(item => ({ id: item.data.id, label: item.data.label, description: item.data.description }))
-      }
-      return []
-    },
-    getData () {
-      if (this.data !== null) {
-        return this.data.items.map(item => {
-          return Object.values(item.data)
-        })
-      }
-      return []
     }
   },
   created () {
