@@ -4,27 +4,44 @@
       {{error}}
     </div>
     <div v-else>
-      <table class='table table-sm table-hover table-striped' style='overflow: auto'>
-        <thead>
-          <tr>
-            <th class="text-nowrap" v-for="col in getColumns" :key="col.id" >{{col.label}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(row, rowIndex) in getData" :key="rowIndex">
-            <td v-for="(cell, cellIndex) in row" :key="cellIndex" class="text-nowrap">{{cell}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <ApiTable
+        v-if="data!=null && metadata!=null"
+        v-bind:sortColumnName="sorting"
+        v-bind:isSortOrderReversed="isReversed"
+        v-bind:is-selectable="false"
+        v-bind:data="data"
+        v-bind:metadata="metadata"
+        v-on:sort="(newValue) => {
+        isReversed =  ( sorting === newValue && isReversed == false )
+        sorting = newValue
+        }"
+      >
+      </ApiTable>
     </div>
+      <b-modal
+        id="reference-table-modal"
+        :title="refTableMetaData.label || refTableMetaData.id"
+        hide-footer
+        body-class="ref-modal-body"
+        dialog-class="ref-modal-dialog"
+        @hidden="resetRefState"
+      >
+        <RefTable
+          :is-data-loaded="isReferenceModalDataLoaded"
+          :entities-to-show="refTableData"
+          :meta-data="refTableMetaData"
+        />
+      </b-modal>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { ApiTable, RefTable } from '@molgenis-ui/components-library'
 
 export default {
   name: 'DataTable.vue',
+  components: { ApiTable, RefTable },
   props: {
     table: {
       type: String,
@@ -47,22 +64,31 @@ export default {
     return {
       metadata: null,
       data: null,
-      error: ''
+      error: '',
+      sorting: '',
+      isReversed: false,
+      isReferenceModalDataLoaded: false,
+      refTableData: [],
+      refTableMetaData: {}
     }
   },
   methods: {
+    getEntityId (entity) {
+      return entity[this.idAttribute].toString()
+    },
     doRequest () {
       this.error = ''
       // Get metadata
-      axios.get(`/api/metadata/${this.table}`)
+      axios.get(`/api/metadata/${this.table}?flattenAttributes=true`)
         .then((response) => {
+          console.log(response.data)
           this.metadata = response.data
         })
         .catch((error) => {
           this.error = error
         })
       // Get entity data
-      axios.get(`/api/data/${this.table}`, {
+      axios.get(`/api/data/${this.table}?page=0&size=20&expand=sex1,mid`, {
         params: {
           affectedStatus: this.affectedStatus
         }
@@ -74,29 +100,38 @@ export default {
         .catch((error) => {
           this.error = error
         })
-    }
-  },
-  computed: {
-    getColumns () {
-      if (this.metadata !== null) {
-        return this.metadata.data.attributes.items.map(item => ({ id: item.data.id, label: item.data.label, description: item.data.description }))
-      }
-      return []
     },
-    getData () {
-      if (this.data !== null) {
-        return this.data.items.map(item => {
-          return Object.values(item.data)
-        })
-      }
-      return []
+    // Value is either refObject {id {string}, label{string}} or list of refObjects (mref)
+    async requestShowRefTable ({ refEntityType, value }) {
+      // fetch data / metadata for the references
+      this.refTableData = []
+      this.refTableMetaData = {}
+      this.isReferenceModalDataLoaded = true
+      this.$bvModal.show('reference-table-modal')
+    },
+    resetRefState () {
+      this.isReferenceModalDataLoaded = false
+      this.refTableData = []
+      this.refTableMetaData = {}
     }
   },
   created () {
     this.doRequest()
+    this.$eventBus.$on('show-reference-table', this.requestShowRefTable)
+  },
+  destroyed () {
+    this.$eventBus.$off('show-reference-table')
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+  .modal-backdrop{
+    opacity: 0.3;
+  }
+
+  // FIXME: how are we going to show the table?
+  main{
+    overflow: auto;
+  }
 </style>
